@@ -1,0 +1,26 @@
+{
+  "name": "heroes-index",
+  "version": "1.0.0",
+  "description": "Website for accessing data parsed from Heroes of the Storm game data",
+  "main": "index.js",
+  "author": "Joe Istas <joe.istas@istastech.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^2.0.0",
+    "babel-preset-env": "^1.7.0",
+    "parcel": "^1.8.1",
+    "typescript": "^2.9.1",
+    "vue-template-compiler": "^2.5.16"
+  },
+  "dependencies": {
+    "dist": "^0.1.2",
+    "isomorphic-fetch": "^2.2.1",
+    "rxjs": "^6.2.1",
+    "vue": "^2.5.16",
+    "vue-hot-reload-api": "^2.3.0",
+    "vue-router": "^3.0.1",
+    "vue-rx": "^6.0.0",
+    "vuetify": "^1.0.19"
+  }
+}
