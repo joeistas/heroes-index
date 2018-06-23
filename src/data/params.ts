@@ -1,19 +1,42 @@
-import { Observable } from 'rxjs'
-import { pluck, map } from 'rxjs/operators'
-import { Route } from 'vue-router'
+export type RealmType = 'live' | 'ptr'
+export type ItemType = 'mounts' | 'heroes'
+export type ProfileType = 'basic' | 'detailed' | 'skins' | 'vo'
 
-export function paramObservable(route$: Observable<Route>, param: string) {
-  return route$.pipe(pluck('params', param))
+export interface Params {
+  realm: RealmType
+  version: number
+  itemType: ItemType
+  itemId: string
+  profile: ProfileType
 }
 
-export function realmObservable(route$: Observable<Route>) {
-  return paramObservable(route$, 'realm').pipe(
-    map(realm => realm === 'ptr' ? 'ptr' : 'live'),
-  )
+export function sanitizeParams(params: any): Params {
+  return {
+    realm: validateEnumParam(params['realm'], [ 'live', 'ptr' ], 'live'),
+    version: paramToNumber(params['version']),
+    itemType: validateEnumParam(params['item'], [ 'mounts', 'heroes' ], 'heroes'),
+    itemId: params['item'],
+    profile: validateEnumParam(params['profile'], [ 'basic', 'detailed', 'skins', 'vo' ], 'basic')
+  }
 }
 
-export function gameItemObservable(route$: Observable<Route>) {
-  return paramObservable(route$, 'item').pipe(
-    map(item => item === 'mounts' ? 'mounts' : 'heroes'),
-  )
+function validateEnumParam<T>(value: T, allowedValues: T[], defaultValue: T): T {
+  if(!value) {
+    return defaultValue
+  }
+
+  if(!allowedValues.includes(value)) {
+    //TODO make custom error for error handling
+    throw new Error(`Invalid param value ${ value } one of ${ allowedValues.join(', ') }`)
+  }
+
+  return value
+}
+
+function paramToNumber(version: string): number {
+  if(version) {
+    return parseInt(version)
+  }
+
+  return undefined
 }

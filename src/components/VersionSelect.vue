@@ -35,12 +35,12 @@
     },
     computed: {
       ptr: function() {
-        return this.realm$ === 'ptr'
+        return this.realm === 'ptr'
       }
     },
     methods: {
       onSelect: function(version) {
-        this.$router.push({ name: 'version', params: { realm: this.realm$, version: version.buildNumber }})
+        this.$router.push({ name: 'version', params: { realm: this.realm, version: version.buildNumber }})
       }
     },
   })

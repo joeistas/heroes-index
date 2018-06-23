@@ -1,5 +1,5 @@
 <template>
-  <div class="version">
+  <div class="version" v-if="version">
     {{ version.name }} -- {{ version.buildNumber }}
   </div>
 </template>

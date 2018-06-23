@@ -1,6 +1,4 @@
-import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { Subject } from 'rxjs'
 
 import Content from './components/Content.vue'
 

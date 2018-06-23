@@ -1,4 +1,7 @@
-export default interface Mount {
-  id: string
-  name: string
+import Item from './Item'
+
+export default interface Mount extends Item {
+  description: string
+  rarity: string
+  category: string
 }

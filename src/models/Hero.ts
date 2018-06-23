@@ -1,7 +1,9 @@
-export default interface Hero {
-  id: string
-  name: string
+import Item from './Item'
+
+export default interface Hero extends Item {
   icon: string
   role: string
   universe: string
+  title: string
+  description: string
 }
