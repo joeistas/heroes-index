@@ -15,7 +15,7 @@ export function sanitizeParams(params: any): Params {
     realm: validateEnumParam(params['realm'], [ 'live', 'ptr' ], 'live'),
     version: paramToNumber(params['version']),
     itemType: validateEnumParam(params['item'], [ 'mounts', 'heroes' ], 'heroes'),
-    itemId: params['item'],
+    itemId: params['itemId'] ? params['itemId'].toLowerCase() : undefined,
     profile: validateEnumParam(params['profile'], [ 'basic', 'detailed', 'skins', 'vo' ], 'basic')
   }
 }

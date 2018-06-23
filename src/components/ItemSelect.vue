@@ -3,10 +3,10 @@
     <v-tab key="0">Heroes</v-tab>
     <v-tab key="1">Mounts</v-tab>
     <v-tab-item>
-      <hero-list :heroes="heroes$" :realm="realm$" :version="selectedVersion$" :selected="selectedHero$"></hero-list>
+      <hero-list :heroes="heroes$" :version="selectedVersion$" :selected="selectedHero$"></hero-list>
     </v-tab-item>
     <v-tab-item>
-      <mount-list :mounts="mounts$" :realm="realm$" :version="selectedVersion$" :selected="selectedMount$"></mount-list>
+      <mount-list :mounts="mounts$" :version="selectedVersion$" :selected="selectedMount$"></mount-list>
     </v-tab-item>
   </v-tabs>
 </template>
@@ -30,7 +30,6 @@
       const itemType$ = this.$store.pipe(pluck('params', 'itemType'))
 
       return {
-        realm$: this.$store.pipe(pluck('params', 'realm')),
         itemType$,
         selectedVersion$: this.$store.pipe(pluck('selectedVersion')),
         selectedHero$: combineLatest(itemType$, selectedItem$).pipe(map(([ itemType, item ]) => itemType === 'heroes' ? item : {})),

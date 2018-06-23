@@ -4,9 +4,8 @@
       <hero-item
         :hero="hero"
         :selected="isSelected(hero)"
-        :realm="realm"
+        :realm="version.realm"
         :versionNumber="version.buildNumber"
-        @click="onSelect(hero)"
         >
       </hero-item>
     </v-flex>
@@ -22,19 +21,8 @@
     components: {
       "hero-item": HeroItem
     },
-    props: [ 'heroes', 'realm', 'version', 'selected' ],
+    props: [ 'heroes', 'version', 'selected' ],
     methods: {
-      onSelect: function(item: any) {
-        this.router$.push({
-          name: 'version',
-          params: {
-            realm: this.realm,
-            version: this.version.buildNumber,
-            item: 'heroes',
-            itemId: item.id,
-          },
-        })
-      },
       isSelected: function(hero: any) {
         if(!this.selected) {
           return false

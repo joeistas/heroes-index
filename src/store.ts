@@ -95,7 +95,7 @@ function selectedItemObservable(params$: Observable<Params>, versionDetails$: Ob
       let items: Item[] = itemType === 'heroes' ? versionDetail.heroes : versionDetail.mounts
 
       if(itemId) {
-        const item = items.find(i => i.id === itemId)
+        const item = items.find(i => i.id.toLowerCase() === itemId)
         if(!item) {
           //TODO custom error for detailed error handling
           throw new Error(`Item ${ itemType }:${ itemId } does not exist`)

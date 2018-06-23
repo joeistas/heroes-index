@@ -4,7 +4,8 @@
       <mount-item
         :mount="mount"
         :selected="isSelected(mount)"
-        @click="onSelect(mount)"
+        :versionNumber="version.buildNumber"
+        :realm="version.realm"
         >
       </mount-item>
     </v-flex>
@@ -20,19 +21,8 @@
     components: {
       "mount-item": MountItem
     },
-    props: [ 'mounts', 'realm', 'version', 'selected' ],
+    props: [ 'mounts', 'version', 'selected' ],
     methods: {
-      onSelect: function(item: any) {
-        this.router$.push({
-          name: 'version',
-          params: {
-            realm: this.realm,
-            version: this.version.buildNumber,
-            item: 'mounts',
-            itemId: item.id,
-          },
-        })
-      },
       isSelected: function(mount: any) {
         if(!this.selected) {
           return false

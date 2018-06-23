@@ -17,7 +17,5 @@ export function buildItemApiUrl(params: Params, versionNumber: number, item: Ite
 }
 
 export function fetchItemJSON(params: Params, versionNumber: number, item: Item): Observable<any> {
-  console.log('hello')
-  console.log(buildItemApiUrl(params, versionNumber, item))
   return fetchJson(buildItemApiUrl(params, versionNumber, item))
 }

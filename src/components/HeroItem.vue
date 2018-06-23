@@ -1,16 +1,16 @@
 <template>
-  <v-card>
+  <div :selected="selected" @click="onSelect()">
     <v-container>
       <v-layout>
         <v-flex>
-          <v-card-media :src="imageUrl"></v-card-media>
+          <img :src="imageUrl"></img>
         </v-flex>
         <v-flex>
           <span>{{ hero.name }}</span>
         </v-flex>
       </v-layout>
     </v-container>
-  </v-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -22,7 +22,20 @@
     props: [ 'hero', 'versionNumber', 'realm', 'selected' ],
     computed: {
       imageUrl: function() {
-        return buildAssetUrl(this.hero.icon, this.versionNumber, this.realm)
+        return buildAssetUrl(this.hero.icon, this.versionNumber)
+      }
+    },
+    methods: {
+      onSelect: function() {
+        this.$router.push({
+          name: 'version',
+          params: {
+            realm: this.realm,
+            version: this.versionNumber,
+            item: 'heroes',
+            itemId: this.hero.id.toLowerCase(),
+          },
+        })
       }
     },
   })
