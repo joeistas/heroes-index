@@ -15,7 +15,7 @@ import App from './components/App.vue'
 Vue.use(VueRx)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
-Vue.use(ObservableStore, { store: createStore(router)})
+Vue.use(ObservableStore, { store: createStore(router) })
 
 new Vue({
   el: "#app",

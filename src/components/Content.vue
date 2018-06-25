@@ -1,7 +1,6 @@
 <template>
   <v-layout column>
     <v-flex xs12>
-      <h1>Hello</h1>
       <version-select
         :realm="realm$"
         :selected="selectedVersion$"

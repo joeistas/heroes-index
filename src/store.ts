@@ -1,6 +1,6 @@
 import VueRouter, { Route } from 'vue-router'
 import { Observable, combineLatest } from 'rxjs'
-import { pluck, map, share, shareReplay, startWith, switchMap, tap, distinctUntilChanged } from 'rxjs/operators'
+import { pluck, map, share, shareReplay, switchMap, tap, distinctUntilChanged } from 'rxjs/operators'
 
 import { buildStore, Observables } from './observable-store'
 import { fetchVersion, fetchAllVersions } from "./data/versions"
@@ -61,6 +61,7 @@ function selectedVersionObservable(params$: Observable<Params>, versions$: Obser
   return combineLatest(params$.pipe(pluck('version'), distinctUntilChanged<number>()), versions$).pipe(
     map(([ versionNumber, versions ]) => {
       if(versionNumber) {
+        console.log(versions)
         const version = versions.find(version => version.buildNumber === versionNumber)
         if(!version) {
           //TODO custom error for detailed error handling
@@ -72,15 +73,14 @@ function selectedVersionObservable(params$: Observable<Params>, versions$: Obser
 
       return versions[0]
     }),
-    startWith({} as Version),
     shareReplay(1),
   )
 }
 
 function versionDetailsObservable(params$: Observable<Params>, selectedVersion$: Observable<Version>): Observable<VersionDetail> {
   return combineLatest(
-      selectedVersion$.pipe(pluck('buildNumber')),
-      params$.pipe(pluck('realm'), distinctUntilChanged<string>())
+      selectedVersion$.pipe(pluck<Version, string>('buildNumber'), tap(value => console.log('buildNumber', value))),
+      params$.pipe(pluck('realm'), distinctUntilChanged<string>(), tap(value => console.log('realm', value)))
     ).pipe(
       switchMap(([ versionNumber, realm ]) => fetchVersion(realm as string, versionNumber)),
       share(),
@@ -95,6 +95,7 @@ function selectedItemObservable(params$: Observable<Params>, versionDetails$: Ob
       let items: Item[] = itemType === 'heroes' ? versionDetail.heroes : versionDetail.mounts
 
       if(itemId) {
+        console.log('items', items, versionDetails$)
         const item = items.find(i => i.id.toLowerCase() === itemId)
         if(!item) {
           //TODO custom error for detailed error handling

@@ -4,8 +4,8 @@
       <div slot="header">{{ propertyKey }}</div>
       <v-container>
         <v-layout column>
-          <v-flex v-for="(value, index) in propertyValue">
-            <json-property :propertyValue="value" :key="index"></json-property>
+          <v-flex v-for="(value, key) in propertyValue" xs12>
+            <json-property :propertyKey="key" :propertyValue="value"></json-property>
           </v-flex>
         </v-layout>
       </v-container>
@@ -17,13 +17,13 @@
   import Vue from 'vue'
 
   export default Vue.extend({
-    name: "json-array",
+    name: "json-object",
     components: {
       "json-property": () => import("./JsonProperty.vue")
     },
     props: {
       propertyKey: String,
-      propertyValue: Array,
+      propertyValue: Object,
     },
   })
 </script>
