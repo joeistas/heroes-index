@@ -1,6 +1,16 @@
 <template>
-  <component :is="propertyComponent" :propertyKey="computedKey" :propertyValue="propertyValue"></component>
+  <component class="json-property" :is="propertyComponent" :propertyKey="propertyKey" :propertyValue="propertyValue"></component>
 </template>
+
+<style scoped>
+  .json-property {
+    border-bottom: 1px solid #EEEEEE;
+  }
+
+  .json-property:last-child {
+    border-bottom: none;
+  }
+</style>
 
 <script lang="ts">
   import Vue from 'vue'
@@ -48,17 +58,6 @@
           default:
             return 'json-value'
         }
-      },
-      computedKey: function {
-        if(this.propertyKey) {
-          return this.propertyKey
-        }
-
-        if(typeof this.propertyValue === 'object') {
-          return this.propertyValue.name || this.propertyValue.id
-        }
-
-        return undefined
       },
     }
   })

@@ -1,19 +1,30 @@
 <template>
   <v-app>
-    <v-toolbar class="red">
-      <v-toolbar-title><router-link to="/">HeroesIndex</router-link></v-toolbar-title>
-    </v-toolbar>
+    <toolbar></toolbar>
     <v-content>
-      <v-container>
+      <v-container app>
         <router-view></router-view>
       </v-container>
     </v-content>
-    <v-footer></v-footer>
+    <v-footer app></v-footer>
   </v-app>
 </template>
+
+<style scoped>
+  a {
+    color: white;
+    text-decoration: none;
+  }
+</style>
 
 <script lang="ts">
   import Vue from 'vue'
 
-  export default Vue.extend()
+  import Toolbar from './Toolbar.vue'
+
+  export default Vue.extend({
+    components: {
+      'toolbar': Toolbar,
+    },
+  })
 </script>

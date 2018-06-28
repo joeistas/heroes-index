@@ -18,7 +18,8 @@ function observables(router: VueRouter): Observables {
   const route$ = createRouteObservable(router)
   const params$ = paramsObservable(route$)
 
-  const versions$ = versionsObservable(params$)
+  const allVersions$ = allVersionsObservable()
+  const versions$ = versionsObservable(params$, allVersions$)
   const selectedVersion$ = selectedVersionObservable(params$, versions$)
 
   const versionDetails$ = versionDetailsObservable(params$, selectedVersion$)
@@ -50,18 +51,22 @@ function createRouteObservable(router: VueRouter): Observable<Route> {
   })
 }
 
-function versionsObservable(params$: Observable<Params>): Observable<Version[]> {
-  return combineLatest(params$.pipe(pluck('realm'), distinctUntilChanged<string>()), fetchAllVersions().pipe(share())).pipe(
+function allVersionsObservable() {
+  return fetchAllVersions().pipe(share())
+}
+
+function versionsObservable(params$: Observable<Params>, allVersions$: Observable<{ [realm: string]: Version[] }>): Observable<Version[]> {
+  return combineLatest(params$.pipe(pluck('realm'), distinctUntilChanged<string>()), allVersions$).pipe(
     map(([ realm, allVersions ]) => allVersions[realm]),
     shareReplay(1),
   )
 }
 
+
 function selectedVersionObservable(params$: Observable<Params>, versions$: Observable<Version[]>): Observable<Version> {
   return combineLatest(params$.pipe(pluck('version'), distinctUntilChanged<number>()), versions$).pipe(
     map(([ versionNumber, versions ]) => {
       if(versionNumber) {
-        console.log(versions)
         const version = versions.find(version => version.buildNumber === versionNumber)
         if(!version) {
           //TODO custom error for detailed error handling
@@ -108,7 +113,6 @@ function selectedItemObservable(params$: Observable<Params>, versionDetails$: Ob
     }),
   )
 }
-
 
 function selectedItemJSONObservable(params$: Observable<Params>, selectedVersion$: Observable<Version>, selectedItem$: Observable<Item>): Observable<any> {
   return combineLatest(params$, selectedVersion$, selectedItem$).pipe(

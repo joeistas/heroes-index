@@ -1,13 +1,8 @@
 <template>
   <v-layout column>
-    <v-flex xs12>
-      <version-select
-        :realm="realm$"
-        :selected="selectedVersion$"
-        :versions="versions$"
-        >
-      </version-select>
-      <item-select></item-select>
+    <v-flex xs12 class="white">
+      <h1 class="display-1 ml-2 my-3" v-if="selectedItem$">{{ selectedItem$.name }}</h1>
+      <profile-selector></profile-selector>
     </v-flex>
     <v-flex xs12>
       <json-content></json-content>
@@ -19,22 +14,27 @@
   import Vue from 'vue'
   import { pluck, map } from 'rxjs/operators'
 
-  import { getStoreObservable } from '../data/store'
-  import VersionSelect from './VersionSelect.vue'
-  import ItemSelect from './ItemSelect.vue'
   import JsonContent from './JsonContent.vue'
+  import ProfileSelector from './ProfileSelector.vue'
 
   export default Vue.extend({
     components: {
-      'version-select': VersionSelect,
-      'item-select': ItemSelect,
       'json-content': JsonContent,
+      'profile-selector': ProfileSelector,
+    },
+    data: function() {
+      return {
+        toolbarOpen: false
+      }
+    },
+    methods: {
+      bannerClick: function() {
+        this.toolbarOpen = !this.toolbarOpen
+      },
     },
     subscriptions: function() {
       return {
-        realm$: this.$store.pipe(pluck('params', 'realm')),
-        selectedVersion$: this.$store.pipe(pluck('selectedVersion')),
-        versions$: this.$store.pipe(pluck('versions')),
+        selectedItem$: this.$store.pipe(pluck('selectedItem')),
       }
     }
   })
