@@ -9,7 +9,7 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import { pluck } from 'rxjs/operators'
+  import { pluck, filter } from 'rxjs/operators'
 
   import { buildAssetUrl } from '../data/base'
 
@@ -32,9 +32,9 @@
     subscriptions: function() {
       const store$ = this.$store
       return {
-        item$: store$.pipe(pluck('selectedItem')),
+        item$: store$.pipe(pluck('selectedItem'), filter(item => item !== null)),
         itemType$: store$.pipe(pluck('params', 'itemType')),
-        version$: store$.pipe(pluck('selectedVersion')),
+        version$: store$.pipe(pluck('selectedVersion'), filter(version => version !== null)),
       }
     }
   })

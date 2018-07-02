@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import { pluck, map } from 'rxjs/operators'
+  import { pluck, filter } from 'rxjs/operators'
 
   import JsonContent from './JsonContent.vue'
   import ProfileSelector from './ProfileSelector.vue'
@@ -34,7 +34,7 @@
     },
     subscriptions: function() {
       return {
-        selectedItem$: this.$store.pipe(pluck('selectedItem')),
+        selectedItem$: this.$store.pipe(pluck('selectedItem'), filter(item => item !== null)),
       }
     }
   })

@@ -7,6 +7,8 @@ import VersionDetail from '../models/VersionDetail'
 
 const REALMS = [ 'live', 'ptr' ]
 
+export const VERSION_DATE_FORMAT = "M/D/YYYY"
+
 export function buildRealmVersionsApiUrl(realm: string, versionNumber?: number | string) {
   let path = realm
   if(versionNumber) {

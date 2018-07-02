@@ -24,7 +24,7 @@
       propertyValue: String,
     },
     mounted: function() {
-      console.log(this.propertyKey, this.propertyValue)
+      // console.log(this.propertyKey, this.propertyValue)
     }
   })
 </script>

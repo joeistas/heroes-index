@@ -1,7 +1,7 @@
 <template>
   <v-menu id="#version-select" offset-y left>
-    <v-btn slot="activator" flat dark>
-      <span v-if="selected">{{ selected.name }}</span>
+    <v-btn slot="activator" class="version-activator" flat dark>
+      <span v-if="selected">{{ selected.name }} ({{ selectedVersionDate }})</span>
       <v-icon>arrow_drop_down</v-icon>
     </v-btn>
     <v-list dense two-line>
@@ -15,11 +15,17 @@
   </v-menu>
 </template>
 
+<style scoped>
+  .version-activator {
+    text-transform: none;
+  }
+</style>
+
 <script lang="ts">
   import Vue from 'vue'
-  import { combineLatest } from 'rxjs'
-  import { startWith, pluck, share, map } from 'rxjs/operators'
+  import { format } from 'date-fns'
 
+  import { VERSION_DATE_FORMAT } from '../data/versions'
   import VersionItem from './VersionItem.vue'
   import { getStoreObservable } from '../data/store'
   import { fetchAllVersions } from '../data/versions'
@@ -31,6 +37,11 @@
     props: {
       selected: Object,
       versions: Array,
+    },
+    computed: {
+      selectedVersionDate: function() {
+        return format(this.selected.releaseDate, VERSION_DATE_FORMAT)
+      },
     },
     methods: {
       onSelect: function(version) {

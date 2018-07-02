@@ -1,45 +1,58 @@
 import VueRouter, { Route } from 'vue-router'
-import { Observable, combineLatest } from 'rxjs'
-import { pluck, map, share, shareReplay, switchMap, tap, distinctUntilChanged } from 'rxjs/operators'
+import { Observable, concat, of } from 'rxjs'
+import {
+  pluck,
+  map,
+  switchMap,
+  delay,
+  catchError
+} from 'rxjs/operators'
 
-import { buildStore, Observables } from './observable-store'
+import { buildStore, Mutation } from './observable-store'
 import { fetchVersion, fetchAllVersions } from "./data/versions"
-import { Params, sanitizeParams } from "./data/params"
+import { Params, RealmType, sanitizeParams } from "./data/params"
 import { fetchItemJSON } from "./data/items"
 import Version from "./models/Version"
 import VersionDetail from "./models/VersionDetail"
 import Item from "./models/Item"
+import NotFoundError from "./models/NotFoundError"
 
 export function createStore(router: VueRouter) {
-  return buildStore(observables(router))
+  return buildStore(mutations(router))
 }
 
-function observables(router: VueRouter): Observables {
+function mutations(router: VueRouter): Mutation[] {
   const route$ = createRouteObservable(router)
-  const params$ = paramsObservable(route$)
 
-  const allVersions$ = allVersionsObservable()
-  const versions$ = versionsObservable(params$, allVersions$)
-  const selectedVersion$ = selectedVersionObservable(params$, versions$)
-
-  const versionDetails$ = versionDetailsObservable(params$, selectedVersion$)
-  const selectedItem$ = selectedItemObservable(params$, versionDetails$)
-  return {
-    params: params$,
-    versions: versions$,
-    selectedVersion: selectedVersion$,
-    versionDetails: versionDetails$,
-    selectedItem: selectedItem$,
-    itemJSON: selectedItemJSONObservable(params$, selectedVersion$, selectedItem$)
-  }
+  return [
+    paramsMutation(route$),
+    allVersionsMutation(),
+    versionsMutation(),
+    selectedVersionMutation(),
+    versionDetailsMutation(),
+    selectedItemMutation(),
+    selectedItemJSONMutation(),
+  ]
 }
 
-function paramsObservable(route$: Observable<Route>): Observable<Params> {
-  return route$.pipe(
-    pluck('params'),
-    map(sanitizeParams),
-    shareReplay(1)
-  )
+function paramsMutation(route$: Observable<Route>): Mutation {
+  return {
+    key: 'params',
+    generator: (): Observable<Params> => {
+      return route$.pipe(
+        pluck('params'),
+        map(params => {
+          try {
+            return sanitizeParams(params)
+          }
+          catch(error) {
+            return error
+          }
+        }),
+        delay(100)
+      )
+    }
+  }
 }
 
 function createRouteObservable(router: VueRouter): Observable<Route> {
@@ -51,73 +64,132 @@ function createRouteObservable(router: VueRouter): Observable<Route> {
   })
 }
 
-function allVersionsObservable() {
-  return fetchAllVersions().pipe(share())
+function allVersionsMutation(): Mutation {
+  return {
+    key: 'allVersions',
+    generator: () => fetchAllVersions().pipe(catchError(error => of(error)))
+  }
 }
 
-function versionsObservable(params$: Observable<Params>, allVersions$: Observable<{ [realm: string]: Version[] }>): Observable<Version[]> {
-  return combineLatest(params$.pipe(pluck('realm'), distinctUntilChanged<string>()), allVersions$).pipe(
-    map(([ realm, allVersions ]) => allVersions[realm]),
-    shareReplay(1),
-  )
+function versionsMutation(): Mutation {
+  return {
+    key: 'versions',
+    generator: (observable$: Observable<[ Params, Observable<{ [realm: string]: Version[] }> ]>): Observable<Version[]> => {
+      return observable$.pipe(
+        map(([ params, allVersions ]) => [ params.realm, allVersions ]),
+        map(([ realm, allVersions ]: [ RealmType, { [realm: string]: Version[] } ]) => allVersions[realm]),
+      )
+    },
+    mutators: [
+      'params',
+      'allVersions'
+    ]
+  }
 }
 
+function selectedVersionMutation(): Mutation {
+  return {
+    key: 'selectedVersion',
+    generator: (observable$: Observable<[ Params, Version[] ]>): Observable<Version | Error> => {
+      return observable$.pipe(
+        map(([ params, versions ]) => [ params.version, versions ] as [ number, Version[] ]),
+        map(([ buildNumber, versions ]) => {
+          if(buildNumber) {
+            const version = versions.find(version => version.buildNumber === buildNumber)
+            if(!version) {
+              return new NotFoundError(`Version ${ buildNumber } was not found`, 'version')
+            }
 
-function selectedVersionObservable(params$: Observable<Params>, versions$: Observable<Version[]>): Observable<Version> {
-  return combineLatest(params$.pipe(pluck('version'), distinctUntilChanged<number>()), versions$).pipe(
-    map(([ versionNumber, versions ]) => {
-      if(versionNumber) {
-        const version = versions.find(version => version.buildNumber === versionNumber)
-        if(!version) {
-          //TODO custom error for detailed error handling
-          throw new Error(`Version ${ versionNumber } does not exist`)
-        }
+            return version
+          }
 
-        return version
-      }
-
-      return versions[0]
-    }),
-    shareReplay(1),
-  )
+          return versions[0]
+        }),
+      )
+    },
+    mutators: [
+      'params',
+      'versions',
+    ]
+  }
 }
 
-function versionDetailsObservable(params$: Observable<Params>, selectedVersion$: Observable<Version>): Observable<VersionDetail> {
-  return combineLatest(
-      selectedVersion$.pipe(pluck<Version, string>('buildNumber'), tap(value => console.log('buildNumber', value))),
-      params$.pipe(pluck('realm'), distinctUntilChanged<string>(), tap(value => console.log('realm', value)))
-    ).pipe(
-      switchMap(([ versionNumber, realm ]) => fetchVersion(realm as string, versionNumber)),
-      share(),
-    )
+function versionDetailsMutation(): Mutation {
+  return {
+    key: 'versionDetails',
+    generator: (observable$: Observable<Version>): Observable<VersionDetail> => {
+      return observable$.pipe(
+        map(version => [ version.buildNumber, version.realm ]),
+        switchMap(([ buildNumber, realm ]) => concat(
+          of(null),
+          fetchVersion(realm as string, buildNumber).pipe(
+            catchError(error => of(error))
+          )
+        )),
+      )
+    },
+    mutators: [
+      'selectedVersion',
+    ]
+  }
 }
 
-function selectedItemObservable(params$: Observable<Params>, versionDetails$: Observable<VersionDetail>): Observable<Item> {
-  return combineLatest(params$, versionDetails$).pipe(
-    map(([ params, versionDetail ]) => {
-      const itemType = params.itemType
-      const itemId = params.itemId
-      let items: Item[] = itemType === 'heroes' ? versionDetail.heroes : versionDetail.mounts
+function selectedItemMutation(): Mutation {
+  return {
+    key: 'selectedItem',
+    generator: (observable$: Observable<[ Params, VersionDetail ]>): Observable<Item | Error> => {
+      return observable$.pipe(
+        map(([ params, versionDetail ]) => {
+          if(versionDetail === null) {
+            return null
+          }
 
-      if(itemId) {
-        console.log('items', items, versionDetails$)
-        const item = items.find(i => i.id.toLowerCase() === itemId)
-        if(!item) {
-          //TODO custom error for detailed error handling
-          throw new Error(`Item ${ itemType }:${ itemId } does not exist`)
-        }
-        return item
-      }
+          const itemType = params.itemType
+          const itemId = params.itemId
+          let items: Item[] = itemType === 'heroes' ? versionDetail.heroes : versionDetail.mounts
 
-      return items[0]
-    }),
-  )
+          if(itemId) {
+            const item = items.find(i => i.id.toLowerCase() === itemId)
+            if(!item) {
+              return new NotFoundError(`Item ${ itemType }:${ itemId } does not exist`, 'itemId')
+            }
+            return item
+          }
+
+          return items[0]
+        }),
+      )
+    },
+    mutators: [
+      'params',
+      'versionDetails',
+    ]
+  }
 }
 
-function selectedItemJSONObservable(params$: Observable<Params>, selectedVersion$: Observable<Version>, selectedItem$: Observable<Item>): Observable<any> {
-  return combineLatest(params$, selectedVersion$, selectedItem$).pipe(
-    switchMap(([ params, selectedVersion, selectedItem ]) => {
-      return fetchItemJSON(params, selectedVersion.buildNumber, selectedItem).pipe(tap(value => console.log('json', value)))
-    })
-  )
+function selectedItemJSONMutation(): Mutation {
+  return {
+    key: 'itemJSON',
+    generator: (observable$: Observable<[ Params, Version, Item ]>): Observable<any> => {
+      return observable$.pipe(
+        switchMap(([ params, selectedVersion, selectedItem ]) => {
+          if(selectedVersion === null || selectedItem === null) {
+            return of(null)
+          }
+
+          return concat(
+            of(null),
+            fetchItemJSON(params, selectedVersion.buildNumber, selectedItem).pipe(
+              catchError(error => of(error)),
+            )
+          )
+        })
+      )
+    },
+    mutators: [
+      'params',
+      'selectedVersion',
+      'selectedItem',
+    ]
+  }
 }

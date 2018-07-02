@@ -1,3 +1,5 @@
+import NotFoundError from '../models/NotFoundError'
+
 export type RealmType = 'live' | 'ptr'
 export type ItemType = 'mounts' | 'heroes'
 export type ProfileType = 'basic' | 'detailed' | 'skins' | 'vo'
@@ -12,22 +14,21 @@ export interface Params {
 
 export function sanitizeParams(params: any): Params {
   return {
-    realm: validateEnumParam(params['realm'], [ 'live', 'ptr' ], 'live'),
-    version: paramToNumber(params['version']),
-    itemType: validateEnumParam(params['item'], [ 'mounts', 'heroes' ], 'heroes'),
-    itemId: params['itemId'] ? params['itemId'].toLowerCase() : undefined,
-    profile: validateEnumParam(params['profile'], [ 'basic', 'detailed', 'skins', 'vo' ], 'basic')
+    realm: validateEnumParam('realm', params['realm'], [ 'live', 'ptr' ], 'live'),
+    version: paramToNumber(params['version']) || null,
+    itemType: validateEnumParam('item', params['item'], [ 'mounts', 'heroes' ], 'heroes'),
+    itemId: params['itemId'] ? params['itemId'].toLowerCase() : null,
+    profile: validateEnumParam('profile', params['profile'], [ 'basic', 'detailed', 'skins', 'vo' ], 'basic')
   }
 }
 
-function validateEnumParam<T>(value: T, allowedValues: T[], defaultValue: T): T {
+function validateEnumParam<T>(name: string, value: T, allowedValues: T[], defaultValue: T): T {
   if(!value) {
     return defaultValue
   }
 
   if(!allowedValues.includes(value)) {
-    //TODO make custom error for error handling
-    throw new Error(`Invalid param value ${ value } one of ${ allowedValues.join(', ') }`)
+    throw new NotFoundError(`Invalid param value ${ value } one of ${ allowedValues.join(', ') }`, name)
   }
 
   return value

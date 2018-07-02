@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md class="px-0">
     <v-layout>
-      <v-flex xs3>
+      <v-flex xs12 class="ml-2">
         <v-btn flat class="json-object-key ma-0" @click="onClick()">
           {{ propertyKey }}
           <v-icon>{{ expand ? 'arrow_drop_up' : 'arrow_drop_down' }}</v-icon>
@@ -9,7 +9,7 @@
       </v-flex>
     </v-layout>
     <collapse-transition>
-      <v-layout column v-show="expand" class="json-object-properties mx-3 mb-3">
+      <v-layout column v-show="expand" class="json-object-properties px-3 mb-3">
         <v-flex v-for="(value, index) in propertyValue" xs11 class="json-object-property">
           <json-property :propertyValue="value"></json-property>
         </v-flex>
@@ -20,7 +20,6 @@
 
 <style scoped>
   .json-object-key {
-    float: right;
     text-transform: none;
   }
 

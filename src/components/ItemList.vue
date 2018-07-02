@@ -43,7 +43,7 @@
             realm: this.version.realm,
             version: this.version.buildNumber,
             item: this.itemType,
-            itemId: item.id.toLowerCase(),
+            itemId: item.id ? item.id.toLowerCase() : undefined,
           },
         }
       },
