@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import { pluck, filter } from 'rxjs/operators'
+  import { pluck } from 'rxjs/operators'
 
   import JsonProperty from './JsonProperty.vue'
 
@@ -17,7 +17,7 @@
     subscriptions: function() {
       const store$ = this.$store
       return {
-        json$: store$.pipe(pluck('itemJSON'), filter(json => json !== null)),
+        json$: store$.pipe(pluck('itemJSON')),
       }
     }
   })

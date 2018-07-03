@@ -24,7 +24,11 @@ export function convertVersionFromJSON(version: any): Version {
 
 export function fetchVersions(realm: string): Observable<[ string, Version[] ]> {
   return fetchJson(buildRealmVersionsApiUrl(realm)).pipe(
-    map(json => [ realm, json.versions ] as [ string, Version[] ])
+    map(json => {
+      const versions = json.versions.map(convertVersionFromJSON) as Version[]
+      versions.sort((a, b) => b.buildNumber - a.buildNumber)
+      return [ realm, versions ] as [ string, Version[] ]
+    })
   )
 }
 
@@ -33,7 +37,7 @@ export function fetchAllVersions(): Observable<{ [realm: string]: Version[] }> {
   return combineLatest(REALMS.map(realm => fetchVersions(realm))).pipe(
     map(versionData => {
       return versionData.reduce((result, [ realm, versions ]) => {
-        result[realm] = versions.map(convertVersionFromJSON)
+        result[realm] = versions
         return result
       }, {} as { [realm: string]: Version[] })
     })

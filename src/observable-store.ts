@@ -69,7 +69,7 @@ export function buildStore(mutations: Mutation[], initialData: { [key: string]: 
       }
     }, initialData),
     startWith(initialData),
-    share(),
+    shareReplay(1),
   )
 
   const errors$ = merge(...errors).pipe(share())

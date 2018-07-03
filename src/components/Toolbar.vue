@@ -45,6 +45,10 @@
     border-color: #6A1B9A;
     background-color: #FFFFFF;
   }
+
+  .toolbar.toolbar--fixed {
+    z-index: 100;
+  }
 </style>
 
 <script lang="ts">
@@ -88,7 +92,6 @@
         heroes$: versionDetails$.pipe(pluck('heroes')),
         mounts$: versionDetails$.pipe(pluck('mounts')),
         versions$: this.$store.pipe(pluck('versions')),
-        activeTab$: itemType$.pipe(map(itemType => itemType === 'heroes' ? '0' : '1')),
       }
     },
   })

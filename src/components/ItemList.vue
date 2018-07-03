@@ -14,13 +14,6 @@
   </v-list>
 </template>
 
-<style scoped>
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-</style>
-
 <script lang="ts">
   import Vue from 'vue'
 
@@ -33,10 +26,6 @@
     props: [ 'items', 'itemType', 'version' ],
     methods: {
       routerTo: function(item: any) {
-        if(!item || !item.id) {
-          console.log(this.items)
-          console.log(this.items.indexOf(item))
-        }
         return {
           name: 'version',
           params: {

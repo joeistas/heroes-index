@@ -22,6 +22,7 @@
     "vue-hot-reload-api": "^2.3.0",
     "vue-router": "^3.0.1",
     "vue-rx": "^6.0.0",
+    "vue-simple-spinner": "^1.2.8",
     "vue2-transitions": "^0.2.3",
     "vuetify": "^1.0.19"
   }

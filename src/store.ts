@@ -67,7 +67,11 @@ function createRouteObservable(router: VueRouter): Observable<Route> {
 function allVersionsMutation(): Mutation {
   return {
     key: 'allVersions',
-    generator: () => fetchAllVersions().pipe(catchError(error => of(error)))
+    generator: () => {
+      return fetchAllVersions().pipe(
+        catchError(error => of(error))
+      )
+    }
   }
 }
 
@@ -123,6 +127,15 @@ function versionDetailsMutation(): Mutation {
         switchMap(([ buildNumber, realm ]) => concat(
           of(null),
           fetchVersion(realm as string, buildNumber).pipe(
+            map(details => {
+              const sortByName = (a: Item, b: Item) => {
+                return a.name < b.name ? -1 :
+                  a.name > b.name ? 1 : 0
+              }
+              details.heroes.sort(sortByName)
+              details.mounts.sort(sortByName)
+              return details
+            }),
             catchError(error => of(error))
           )
         )),

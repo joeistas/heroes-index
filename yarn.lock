@@ -3656,6 +3656,10 @@ vue-rx@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/vue-rx/-/vue-rx-6.0.0.tgz#9f002a96dc54bd43ff7fc199262c7ebc15211e0a"
 
+vue-simple-spinner@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/vue-simple-spinner/-/vue-simple-spinner-1.2.8.tgz#638249e9b25b43424ff906c14f1b7c7ed441ce9d"
+
 vue-template-compiler@^2.5.16:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.5.16.tgz#93b48570e56c720cdf3f051cc15287c26fbd04cb"

@@ -9,6 +9,7 @@
         v-for="version in versions"
         :key="version.buildNumber"
         :version="version"
+        :active="selected.buildNumber === version.buildNumber"
         >
       </version-item>
     </v-list>

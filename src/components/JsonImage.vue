@@ -2,16 +2,10 @@
   <v-container grid-list-md>
     <v-layout align-center>
       <json-property-key>{{ propertyKey }}</json-property-key>
-      <json-property-value><img class="json-thumbnail" :src="imageSrc" /></json-property-value>
+      <json-property-value><img class="json-thumbnail" :src="imageSrc" height="50px" /></json-property-value>
     </v-layout>
   </v-container>
 </template>
-
-<style scoped>
-  .json-thumbnail {
-    height: 50px;
-  }
-</style>
 
 <script lang="ts">
   import Vue from 'vue'
