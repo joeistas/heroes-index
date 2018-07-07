@@ -8,7 +8,7 @@
         <content-overlay :show="loading$ || error$" :spinner="loading$"></content-overlay>
       </v-container>
     </v-content>
-    <v-footer app></v-footer>
+    <hi-footer></hi-footer>
   </v-app>
 </template>
 
@@ -27,6 +27,7 @@
   import Toolbar from './Toolbar.vue'
   import ContentOverlay from './ContentOverlay.vue'
   import ErrorToast from './ErrorToast.vue'
+  import Footer from './Footer.vue'
   import NotFoundError from '../models/NotFoundError'
 
   export default Vue.extend({
@@ -34,6 +35,7 @@
       'toolbar': Toolbar,
       'content-overlay': ContentOverlay,
       'error-toast': ErrorToast,
+      'hi-footer': Footer,
     },
     subscriptions: function() {
       return {

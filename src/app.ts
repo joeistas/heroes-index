@@ -6,6 +6,7 @@ import Transitions from 'vue2-transitions'
 import { filter, map } from 'rxjs/operators'
 
 import "vuetify/dist/vuetify.min.css"
+import '@mdi/font/css/materialdesignicons.css'
 
 import { createStore } from './store'
 import * as ObservableStore from './observable-store'
