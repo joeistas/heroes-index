@@ -1,8 +1,8 @@
 <template>
   <v-container grid-list-md>
-    <v-layout>
+    <v-layout wrap class="ml-3">
       <json-property-key>{{ propertyKey }}</json-property-key>
-      <json-property-value>{{ propertyValue ? 'true' : 'false' }}</json-property-value>
+      <json-property-value :class="valueClasses()">{{ propertyValue ? 'true' : 'false' }}</json-property-value>
     </v-layout>
   </v-container>
 </template>
@@ -22,6 +22,16 @@
     props: {
       propertyKey: String,
       propertyValue: [ Boolean ],
+    },
+    methods: {
+      valueClasses: function() {
+        const value = this.propertyValue
+        return {
+          'green--text': value,
+          'red--text': !value,
+          'text--darken-3': true,
+        }
+      },
     },
   })
 </script>

@@ -1,8 +1,8 @@
 <template>
   <v-list-tile @click="onSelect()" :class="{ active }">
     <v-list-tile-content>
-      <v-list-tile-title class="text-xs-right version-title" :class="titleClasses">{{ version.name }}</v-list-tile-title>
-      <v-list-tile-sub-title class="text-xs-right">{{ versionDate }} - {{ version.versionNumber }}</v-list-tile-sub-title>
+      <v-list-tile-title class="text-md-right version-title" :class="titleClasses">{{ version.name }}</v-list-tile-title>
+      <v-list-tile-sub-title class="text-md-right">{{ versionDate }} - {{ version.versionNumber }}</v-list-tile-sub-title>
     </v-list-tile-content>
   </v-list-tile>
 </template>

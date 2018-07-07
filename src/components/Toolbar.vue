@@ -1,7 +1,7 @@
 <template>
   <v-toolbar class="purple darken-3" app>
     <v-toolbar-title><router-link to="/">HeroesIndex</router-link></v-toolbar-title>
-    <v-toolbar-items class="ml-2">
+    <v-toolbar-items class="ml-2 hidden-sm-and-down">
       <v-menu offset-y max-height="80vh">
         <v-btn slot="activator" flat dark>Heroes<v-icon>arrow_drop_down</v-icon></v-btn>
         <item-list :items="heroes$" :version="selectedVersion$" itemType="heroes"></item-list>
@@ -12,12 +12,23 @@
       </v-menu>
     </v-toolbar-items>
     <v-spacer></v-spacer>
-    <v-toolbar-items class="mr-2">
+    <v-toolbar-items class="mr-2 hidden-sm-and-down">
       <version-select :selected="selectedVersion$" :versions="versions$"></version-select>
     </v-toolbar-items>
-    <v-btn-toggle :input-value="realm$" class="elevation-0">
+    <v-btn-toggle :input-value="realm$" class="elevation-0 hidden-sm-and-down mr-3">
       <v-btn value="ptr" @click="onPtrClick()">PTR</v-btn>
     </v-btn-toggle>
+    <v-toolbar-items class="hidden-md-and-up">
+      <toolbar-menu
+        :realm="realm$"
+        :selectedVersion="selectedVersion$"
+        :versions="versions$"
+        :heroes="heroes$"
+        :mounts="mounts$"
+        @change-realm="onPtrClick()"
+        >
+      </toolbar-menu>
+    </v-toolbar-items>
   </v-toolbar>
 </template>
 
@@ -59,11 +70,13 @@
   import { getStoreObservable } from '../data/store'
   import ItemList from './ItemList.vue'
   import VersionSelect from './VersionSelect.vue'
+  import ToolbarMenu from './ToolbarMenu.vue'
 
   export default Vue.extend({
     components: {
       "item-list": ItemList,
       "version-select": VersionSelect,
+      "toolbar-menu": ToolbarMenu,
     },
     methods: {
       onPtrClick: function() {

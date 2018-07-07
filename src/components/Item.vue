@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs3>
+  <v-flex xs12 md3>
     <v-list-tile :avator="hasImage" :to="to">
       <v-list-tile-avatar v-if="hasImage">
         <img :src="imageUrl" />

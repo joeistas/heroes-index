@@ -1,5 +1,5 @@
 <template>
-  <v-flex class="text-xs-left body-1 my-3" md8>
+  <v-flex class="text-xs-left body-1 my-3" md8 sm6 xs10 offset-xs2 offset-sm0>
     <slot></slot>
   </v-flex>
 </template>

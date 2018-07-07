@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md class="px-0">
-    <v-layout>
-      <v-flex xs12 class="ml-2">
+    <v-layout class="ml-2">
+      <v-flex xs12>
         <v-btn flat class="json-object-key ma-0" @click="onClick()">
           {{ propertyKey }}
           <v-icon>{{ expand ? 'arrow_drop_up' : 'arrow_drop_down' }}</v-icon>

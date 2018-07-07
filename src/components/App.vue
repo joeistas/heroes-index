@@ -2,7 +2,7 @@
   <v-app>
     <error-toast :error="error$"></error-toast>
     <toolbar></toolbar>
-    <v-content>
+    <v-content class="grey lighten-3">
       <v-container app>
         <router-view></router-view>
         <content-overlay :show="loading$ || error$" :spinner="loading$"></content-overlay>

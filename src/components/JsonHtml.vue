@@ -1,12 +1,17 @@
 <template>
   <v-container grid-list-md>
-    <v-layout>
+    <v-layout wrap class="ml-3">
       <json-property-key>{{ propertyKey }}</json-property-key>
-      <json-property-value><span v-html="propertyValue"></span></json-property-value>
+      <json-property-value><span v-html="propertyValue" class="html-value"></span></json-property-value>
     </v-layout>
   </v-container>
 </template>
 
+<style scoped>
+  .html-value >>> span {
+    color: #F57C00;
+  }
+</style>
 <script lang="ts">
   import Vue from 'vue'
 
@@ -23,8 +28,5 @@
       propertyKey: String,
       propertyValue: String,
     },
-    mounted: function() {
-      // console.log(this.propertyKey, this.propertyValue)
-    }
   })
 </script>

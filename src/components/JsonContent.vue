@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-1 pt-2 white" v-if="json$">
+  <div class="mt-1 pt-2 grey lighten-5" v-if="json$">
     <json-property v-for="(value, key) in json$" :key="key" :propertyKey="key" :propertyValue="value"></json-property>
   </div>
 </template>

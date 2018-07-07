@@ -4,15 +4,7 @@
       <span v-if="selected">{{ selected.name }} ({{ selectedVersionDate }})</span>
       <v-icon>arrow_drop_down</v-icon>
     </v-btn>
-    <v-list dense two-line>
-      <version-item
-        v-for="version in versions"
-        :key="version.buildNumber"
-        :version="version"
-        :active="selected.buildNumber === version.buildNumber"
-        >
-      </version-item>
-    </v-list>
+    <version-list :versions="versions" :selected="selected"></version-list>
   </v-menu>
 </template>
 
@@ -27,13 +19,13 @@
   import { format } from 'date-fns'
 
   import { VERSION_DATE_FORMAT } from '../data/versions'
+  import VersionList from './VersionList.vue'
   import VersionItem from './VersionItem.vue'
-  import { getStoreObservable } from '../data/store'
-  import { fetchAllVersions } from '../data/versions'
 
   export default Vue.extend({
     components: {
       'version-item': VersionItem,
+      'version-list': VersionList,
     },
     props: {
       selected: Object,
@@ -43,11 +35,6 @@
       selectedVersionDate: function() {
         return format(this.selected.releaseDate, VERSION_DATE_FORMAT)
       },
-    },
-    methods: {
-      onSelect: function(version) {
-        this.$router.push({ name: 'version', params: { realm: version.realm, version: version.buildNumber }})
-      }
     },
   })
 </script>

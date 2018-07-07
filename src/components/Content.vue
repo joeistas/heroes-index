@@ -1,6 +1,6 @@
 <template>
   <v-layout column>
-    <v-flex xs12 class="white">
+    <v-flex xs12 class="grey lighten-5">
       <h1 class="display-1 ml-2 my-3" v-if="selectedItem$">{{ selectedItem$.name }}</h1>
       <profile-selector></profile-selector>
     </v-flex>
@@ -14,6 +14,7 @@
   import Vue from 'vue'
   import { pluck, filter } from 'rxjs/operators'
 
+  import { buildAssetUrl } from '../data/base'
   import JsonContent from './JsonContent.vue'
   import ProfileSelector from './ProfileSelector.vue'
 
@@ -34,7 +35,9 @@
     },
     subscriptions: function() {
       return {
+        versionNumber$: this.$store.pipe(pluck('selectedVersion', 'buildNumber')),
         selectedItem$: this.$store.pipe(pluck('selectedItem'), filter(item => item !== null)),
+        json$: this.$store.pipe(pluck('itemJSON'))
       }
     }
   })

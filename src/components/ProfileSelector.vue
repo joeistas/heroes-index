@@ -1,5 +1,5 @@
 <template>
-  <v-tabs slider-color="purple darken-3" v-if="item$" :value="profileIndex$">
+  <v-tabs slider-color="purple darken-3" color="transparent" v-if="item$" :value="profileIndex$">
     <v-tab
       v-for="profile in profiles"
       @click="tabClicked(profile)"

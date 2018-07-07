@@ -1,5 +1,5 @@
 <template>
-  <v-flex class="text-xs-left body-2 my-3 ml-3" md3>
+  <v-flex class="text-xs-left body-2 my-3" md3 sm6 xs12>
     <span>
       <slot></slot>
     </span>

@@ -1,8 +1,8 @@
 <template>
   <v-container grid-list-md>
-    <v-layout>
+    <v-layout wrap class="ml-3">
       <json-property-key>{{ propertyKey }}</json-property-key>
-      <json-property-value>{{ propertyValue }}</json-property-value>
+      <json-property-value :class="valueClasses()">{{ propertyValue }}</json-property-value>
     </v-layout>
   </v-container>
 </template>
@@ -22,6 +22,14 @@
     props: {
       propertyKey: String,
       propertyValue: [ String, Number ],
+    },
+    methods: {
+      valueClasses: function() {
+        const isNumber = typeof this.propertyValue === 'number'
+        return {
+          "teal--text": isNumber,
+        }
+      },
     },
   })
 </script>
