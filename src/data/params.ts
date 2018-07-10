@@ -35,9 +35,5 @@ function validateEnumParam<T>(name: string, value: T, allowedValues: T[], defaul
 }
 
 function paramToNumber(version: string): number {
-  if(version) {
-    return parseInt(version)
-  }
-
-  return undefined
+  return version ? parseInt(version) : undefined
 }

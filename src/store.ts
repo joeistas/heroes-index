@@ -38,7 +38,7 @@ function mutations(router: VueRouter): Mutation[] {
 function paramsMutation(route$: Observable<Route>): Mutation {
   return {
     key: 'params',
-    generator: (): Observable<Params> => {
+    mutator: (): Observable<Params> => {
       return route$.pipe(
         pluck('params'),
         map(params => {
@@ -67,7 +67,7 @@ function createRouteObservable(router: VueRouter): Observable<Route> {
 function allVersionsMutation(): Mutation {
   return {
     key: 'allVersions',
-    generator: () => {
+    mutator: () => {
       return fetchAllVersions().pipe(
         catchError(error => of(error))
       )
@@ -78,13 +78,13 @@ function allVersionsMutation(): Mutation {
 function versionsMutation(): Mutation {
   return {
     key: 'versions',
-    generator: (observable$: Observable<[ Params, Observable<{ [realm: string]: Version[] }> ]>): Observable<Version[]> => {
+    mutator: (observable$: Observable<[ Params, Observable<{ [realm: string]: Version[] }> ]>): Observable<Version[]> => {
       return observable$.pipe(
         map(([ params, allVersions ]) => [ params.realm, allVersions ]),
         map(([ realm, allVersions ]: [ RealmType, { [realm: string]: Version[] } ]) => allVersions[realm]),
       )
     },
-    mutators: [
+    dependencies: [
       'params',
       'allVersions'
     ]
@@ -94,7 +94,7 @@ function versionsMutation(): Mutation {
 function selectedVersionMutation(): Mutation {
   return {
     key: 'selectedVersion',
-    generator: (observable$: Observable<[ Params, Version[] ]>): Observable<Version | Error> => {
+    mutator: (observable$: Observable<[ Params, Version[] ]>): Observable<Version | Error> => {
       return observable$.pipe(
         map(([ params, versions ]) => [ params.version, versions ] as [ number, Version[] ]),
         map(([ buildNumber, versions ]) => {
@@ -111,7 +111,7 @@ function selectedVersionMutation(): Mutation {
         }),
       )
     },
-    mutators: [
+    dependencies: [
       'params',
       'versions',
     ]
@@ -121,7 +121,7 @@ function selectedVersionMutation(): Mutation {
 function versionDetailsMutation(): Mutation {
   return {
     key: 'versionDetails',
-    generator: (observable$: Observable<Version>): Observable<VersionDetail> => {
+    mutator: (observable$: Observable<Version>): Observable<VersionDetail> => {
       return observable$.pipe(
         map(version => [ version.buildNumber, version.realm ]),
         switchMap(([ buildNumber, realm ]) => concat(
@@ -141,7 +141,7 @@ function versionDetailsMutation(): Mutation {
         )),
       )
     },
-    mutators: [
+    dependencies: [
       'selectedVersion',
     ]
   }
@@ -150,7 +150,7 @@ function versionDetailsMutation(): Mutation {
 function selectedItemMutation(): Mutation {
   return {
     key: 'selectedItem',
-    generator: (observable$: Observable<[ Params, VersionDetail ]>): Observable<Item | Error> => {
+    mutator: (observable$: Observable<[ Params, VersionDetail ]>): Observable<Item | Error> => {
       return observable$.pipe(
         map(([ params, versionDetail ]) => {
           if(versionDetail === null) {
@@ -173,7 +173,7 @@ function selectedItemMutation(): Mutation {
         }),
       )
     },
-    mutators: [
+    dependencies: [
       'params',
       'versionDetails',
     ]
@@ -183,7 +183,7 @@ function selectedItemMutation(): Mutation {
 function selectedItemJSONMutation(): Mutation {
   return {
     key: 'itemJSON',
-    generator: (observable$: Observable<[ Params, Version, Item ]>): Observable<any> => {
+    mutator: (observable$: Observable<[ Params, Version, Item ]>): Observable<any> => {
       return observable$.pipe(
         switchMap(([ params, selectedVersion, selectedItem ]) => {
           if(selectedVersion === null || selectedItem === null) {
@@ -199,7 +199,7 @@ function selectedItemJSONMutation(): Mutation {
         })
       )
     },
-    mutators: [
+    dependencies: [
       'params',
       'selectedVersion',
       'selectedItem',

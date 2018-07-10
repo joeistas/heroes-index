@@ -1,6 +1,6 @@
 import Vue, { VueConstructor } from 'vue'
 import { Observable, merge, combineLatest, empty } from 'rxjs'
-import { map, scan, shareReplay, share, filter, debounceTime, startWith, pluck } from 'rxjs/operators'
+import { map, scan, shareReplay, share, filter, debounceTime, pluck } from 'rxjs/operators'
 
 declare module "vue/types/vue" {
   interface Vue {
@@ -16,11 +16,11 @@ export type Observables = { [key: string]: Observable<any> }
 
 export interface Mutation {
   key: string
-  generator: MutationGenerator
-  mutators?: string[]
+  mutator: MutatorGenerator
+  dependencies?: string[]
 }
 
-export type MutationGenerator = (observable: Observable<any>) => Observable<any>
+export type MutatorGenerator = (observable: Observable<any>) => Observable<any>
 
 export interface ObservableStoreInstallOptions {
   store: ObservableStore,
@@ -68,7 +68,6 @@ export function buildStore(mutations: Mutation[], initialData: { [key: string]: 
         ...change,
       }
     }, initialData),
-    startWith(initialData),
     shareReplay(1),
   )
 
@@ -98,7 +97,7 @@ function buildMutationObservable(observables: Observables, keys: string[]) {
 }
 
 function toObjectObserables<T>(mutation: Mutation, observables: Observables): Observable<{ [key: string]: T } | Error> {
-  return mutation.generator(buildMutationObservable(observables, mutation.mutators || [])).pipe(
+  return mutation.mutator(buildMutationObservable(observables, mutation.dependencies || [])).pipe(
     map(value => {
       return value instanceof Error ? value : { [mutation.key]: value }
     }),

@@ -14,7 +14,6 @@
   import Vue from 'vue'
   import { pluck, filter } from 'rxjs/operators'
 
-  import { buildAssetUrl } from '../data/base'
   import JsonContent from './JsonContent.vue'
   import ProfileSelector from './ProfileSelector.vue'
 
@@ -23,21 +22,9 @@
       'json-content': JsonContent,
       'profile-selector': ProfileSelector,
     },
-    data: function() {
-      return {
-        toolbarOpen: false
-      }
-    },
-    methods: {
-      bannerClick: function() {
-        this.toolbarOpen = !this.toolbarOpen
-      },
-    },
     subscriptions: function() {
       return {
-        versionNumber$: this.$store.pipe(pluck('selectedVersion', 'buildNumber')),
         selectedItem$: this.$store.pipe(pluck('selectedItem'), filter(item => item !== null)),
-        json$: this.$store.pipe(pluck('itemJSON'))
       }
     }
   })

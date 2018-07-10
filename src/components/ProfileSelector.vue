@@ -11,12 +11,11 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import { pluck, filter, map, tap } from 'rxjs/operators'
+  import { pluck, filter, map } from 'rxjs/operators'
 
   import { buildAssetUrl } from '../data/base'
 
   export default Vue.extend({
-    props: [ 'item', 'version', 'toolbarOpen' ],
     data: function() {
       return {
         profiles: ['basic', 'skins', 'vo', 'detailed']

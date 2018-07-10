@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": false,
   "devDependencies": {
+    "@types/node": "^10.5.2",
     "@vue/component-compiler-utils": "^2.0.0",
     "babel-preset-env": "^1.7.0",
     "parcel": "^1.8.1",

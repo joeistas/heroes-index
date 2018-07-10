@@ -21,7 +21,7 @@
     },
     props: {
       propertyKey: String,
-      propertyValue: [ Boolean ],
+      propertyValue: Boolean,
     },
     methods: {
       valueClasses: function() {

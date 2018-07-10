@@ -2,8 +2,8 @@ import { Observable, from } from 'rxjs'
 import { map, mergeMap } from 'rxjs/operators'
 import FetchError from '../models/FetchError'
 
-export const BASE_API_URL = "https://sxvwd05sl0.execute-api.us-west-2.amazonaws.com/dev/"
-export const BASE_ASSET_URL = "https://s3-us-west-2.amazonaws.com/istastech.heroesindex.assets"
+export const BASE_API_URL = process.env.BASE_API_URL
+export const BASE_ASSET_URL = process.env.BASE_ASSET_URL
 
 export function buildApiUrl(path: string): string {
   return BASE_API_URL + path

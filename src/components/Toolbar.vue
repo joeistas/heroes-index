@@ -64,10 +64,9 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import { combineLatest, merge, Subject } from 'rxjs'
-  import { map, pluck, filter, startWith } from 'rxjs/operators'
+  import { combineLatest } from 'rxjs'
+  import { map, pluck, filter } from 'rxjs/operators'
 
-  import { getStoreObservable } from '../data/store'
   import ItemList from './ItemList.vue'
   import VersionSelect from './VersionSelect.vue'
   import ToolbarMenu from './ToolbarMenu.vue'
@@ -98,7 +97,6 @@
 
       return {
         realm$: this.$store.pipe(pluck('params', 'realm')),
-        itemType$,
         selectedVersion$: this.$store.pipe(pluck('selectedVersion'), filter(version => version !== null)),
         selectedHero$: combineLatest(itemType$, selectedItem$).pipe(map(([ itemType, item ]) => itemType === 'heroes' ? item : {})),
         selectedMount$: combineLatest(itemType$, selectedItem$).pipe(map(([ itemType, item ]) => itemType === 'mounts' ? item : {})),
