@@ -1,5 +1,5 @@
 <template>
-  <component class="json-property" :is="propertyComponent" :propertyKey="propertyKey" :propertyValue="propertyValue"></component>
+  <component class="json-property" :is="propertyComponent" :property-key="propertyKey" :property-value="propertyValue"></component>
 </template>
 
 <style scoped>

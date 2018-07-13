@@ -4,11 +4,11 @@
     <v-toolbar-items class="ml-2 hidden-sm-and-down">
       <v-menu offset-y max-height="80vh">
         <v-btn slot="activator" flat dark>Heroes<v-icon>arrow_drop_down</v-icon></v-btn>
-        <item-list :items="heroes$" :version="selectedVersion$" itemType="heroes"></item-list>
+        <item-list :items="heroes$" :version="selectedVersion$" item-type="heroes"></item-list>
       </v-menu>
       <v-menu offset-y allow-overflow max-height="80vh">
         <v-btn slot="activator" dark flat>Mounts<v-icon>arrow_drop_down</v-icon></v-btn>
-        <item-list :items="mounts$" :version="selectedVersion$" itemType="mounts"></item-list>
+        <item-list :items="mounts$" :version="selectedVersion$" item-type="mounts"></item-list>
       </v-menu>
     </v-toolbar-items>
     <v-spacer></v-spacer>
@@ -21,7 +21,7 @@
     <v-toolbar-items class="hidden-md-and-up">
       <toolbar-menu
         :realm="realm$"
-        :selectedVersion="selectedVersion$"
+        :selected-version="selectedVersion$"
         :versions="versions$"
         :heroes="heroes$"
         :mounts="mounts$"
@@ -38,26 +38,26 @@
     text-decoration: none;
   }
 
-  .toolbar__content .btn-toggle .btn {
+  .v-toolbar__content .v-btn-toggle .v-btn {
     color: #FFFFFF;
     background-color: #6A1B9A;
     border: #FFFFFF solid 1px;
     opacity: 1;
   }
 
-  .toolbar__content .btn-toggle .btn:hover {
+  .v-toolbar__content .v-btn-toggle .v-btn:hover {
     color: #FFFFFFFF;
     border: #FFFFFFFF solid 1px;
   }
 
-  .toolbar__content .btn-toggle .btn--active,
-  .toolbar__content .btn-toggle .btn--active:hover {
+  .v-toolbar__content .v-btn-toggle .v-btn--active,
+  .v-toolbar__content .v-btn-toggle .v-btn--active:hover {
     color: #6A1B9A;
     border-color: #6A1B9A;
     background-color: #FFFFFF;
   }
 
-  .toolbar.toolbar--fixed {
+  .v-toolbar.v-toolbar--fixed {
     z-index: 100;
   }
 </style>

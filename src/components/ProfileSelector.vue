@@ -1,11 +1,11 @@
 <template>
   <v-tabs slider-color="purple darken-3" color="transparent" v-if="item$" :value="profileIndex$">
-    <v-tab
+      <v-tab
       v-for="profile in profiles"
       @click="tabClicked(profile)"
       >
-        {{ profile }}
-      </v-tab>
+      {{ profile }}
+    </v-tab>
   </v-tabs>
 </template>
 
@@ -13,14 +13,12 @@
   import Vue from 'vue'
   import { pluck, filter, map } from 'rxjs/operators'
 
-  import { buildAssetUrl } from '../data/base'
-
   export default Vue.extend({
     data: function() {
       return {
         profiles: ['basic', 'skins', 'vo', 'detailed']
       }
-    }
+    },
     methods: {
       toProfile: function(profile: string) {
         return {

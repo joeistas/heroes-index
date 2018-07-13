@@ -5,7 +5,7 @@
         v-for="item in items"
         :key="item.id"
         :item="item"
-        :versionNumber="version.buildNumber"
+        :version-number="version.buildNumber"
         :to="routerTo(item)"
         >
       </item-component>

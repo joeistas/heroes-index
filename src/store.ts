@@ -5,7 +5,7 @@ import {
   map,
   switchMap,
   delay,
-  catchError
+  catchError,
 } from 'rxjs/operators'
 
 import { buildStore, Mutation } from './observable-store'

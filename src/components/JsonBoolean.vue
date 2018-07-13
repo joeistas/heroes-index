@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md>
-    <v-layout wrap class="ml-3">
+    <v-layout wrap>
       <json-property-key>{{ propertyKey }}</json-property-key>
       <json-property-value :class="valueClasses()">{{ propertyValue ? 'true' : 'false' }}</json-property-value>
     </v-layout>

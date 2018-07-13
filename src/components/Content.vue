@@ -1,8 +1,8 @@
 <template>
   <v-layout column>
     <v-flex xs12 class="grey lighten-5">
-      <h1 class="display-1 ml-2 my-3" v-if="selectedItem$">{{ selectedItem$.name }}</h1>
-      <profile-selector></profile-selector>
+      <h1 class="display-1 ml-4 my-3" v-if="selectedItem$">{{ selectedItem$.name }}</h1>
+      <item-toolbar></item-toolbar>
     </v-flex>
     <v-flex xs12>
       <json-content></json-content>
@@ -15,12 +15,12 @@
   import { pluck, filter } from 'rxjs/operators'
 
   import JsonContent from './JsonContent.vue'
-  import ProfileSelector from './ProfileSelector.vue'
+  import ItemToolbar from './ItemToolbar.vue'
 
   export default Vue.extend({
     components: {
       'json-content': JsonContent,
-      'profile-selector': ProfileSelector,
+      'item-toolbar': ItemToolbar,
     },
     subscriptions: function() {
       return {

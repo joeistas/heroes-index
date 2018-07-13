@@ -1,6 +1,6 @@
 <template>
-  <v-container grid-list-md class="px-0">
-    <v-layout class="ml-2">
+  <v-container grid-list-md class="json-object">
+    <v-layout class="mt-0">
       <v-flex xs12>
         <v-btn flat class="json-object-key ma-0" @click="onClick()">
           {{ computedKey }}
@@ -9,14 +9,18 @@
       </v-flex>
     </v-layout>
     <collapse-transition>
-      <div column v-show="expand" class="json-object-properties px-3 mb-3">
-        <json-property :propertyKey="key" :propertyValue="value" v-for="(value, key) in propertyValue"></json-property>
+      <div column v-if="expand" class="json-object-properties px-3 mb-3">
+        <json-property :property-key="key" :property-value="value" v-for="(value, key) in propertyValue"></json-property>
       </div>
     </collapse-transition>
   </v-container>
 </template>
 
 <style scoped>
+  .json-object {
+    margin-left: -16px;
+  }
+
   .json-object-key {
     text-transform: none;
   }

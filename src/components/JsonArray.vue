@@ -1,17 +1,17 @@
 <template>
-  <v-container grid-list-md class="px-0">
-    <v-layout class="ml-2">
+  <v-container grid-list-md class="json-array">
+    <v-layout class="mt-0">
       <v-flex xs12>
-        <v-btn flat class="json-object-key ma-0" @click="onClick()">
+        <v-btn flat class="json-array-key ma-0" @click="onClick()">
           {{ propertyKey }}
           <v-icon>{{ expand ? 'arrow_drop_up' : 'arrow_drop_down' }}</v-icon>
         </v-btn>
       </v-flex>
     </v-layout>
     <collapse-transition>
-      <v-layout column v-show="expand" class="json-object-properties px-3 mb-3">
-        <v-flex v-for="(value, index) in propertyValue" xs11 class="json-object-property">
-          <json-property :propertyValue="value"></json-property>
+      <v-layout column v-if="expand" class="json-array-properties px-3 mb-3">
+        <v-flex v-for="(value, index) in propertyValue" xs11 class="json-array-property">
+          <json-property :property-value="value"></json-property>
         </v-flex>
       </v-layout>
     </collapse-transition>
@@ -19,20 +19,24 @@
 </template>
 
 <style scoped>
-  .json-object-key {
+  .json-array {
+    margin-left: -16px;
+  }
+
+  .json-array-key {
     text-transform: none;
   }
 
-  .json-object-properties {
+  .json-array-properties {
     border-top: 1px solid #BDBDBD;
     border-bottom: 1px solid #BDBDBD;
   }
 
-  .json-object-property {
+  .json-array-property {
     border-bottom: 1px solid #EEEEEE;
   }
 
-  .json-object-property:last-child {
+  .json-array-property:last-child {
     border-bottom: none;
   }
 </style>

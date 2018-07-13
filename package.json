@@ -11,6 +11,7 @@
     "@vue/component-compiler-utils": "^2.0.0",
     "babel-preset-env": "^1.7.0",
     "parcel": "^1.8.1",
+    "rimraf": "^2.6.2",
     "typescript": "^2.9.1",
     "vue-template-compiler": "^2.5.16"
   },
@@ -27,5 +28,11 @@
     "vue-simple-spinner": "^1.2.8",
     "vue2-transitions": "^0.2.3",
     "vuetify": "^1.0.19"
+  },
+  "scripts": {
+    "clean": "rimraf -r ./dist",
+    "start": "parcel index.html",
+    "build": "npm run-script clean && parcel build index.html",
+    "build:dev": "npm run-script clean && NODE_ENV=dev parcel build index.html"
   }
 }

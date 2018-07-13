@@ -5,7 +5,7 @@
     <v-content class="grey lighten-3">
       <v-container app>
         <router-view></router-view>
-        <content-overlay :show="loading$ || error$" :spinner="loading$"></content-overlay>
+        <content-overlay :show="loading$ || error$" :spinner="loading$ && !error$"></content-overlay>
       </v-container>
     </v-content>
     <hi-footer></hi-footer>

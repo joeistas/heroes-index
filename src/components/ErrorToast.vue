@@ -1,6 +1,6 @@
 <template>
   <v-snackbar color="red darken-4" top :value="error" :timeout="0">
-    {{ error ? error.message : "Error" }}
+    {{ message }}
     <v-btn dark flat @click="refreshPage()">Refresh</v-btn>
   </v-snackbar>
 </template>
@@ -13,8 +13,17 @@
 
   export default Vue.extend({
     props: {
-      error: Object
+      error: Error
     },
+    computed: {
+      message: function() {
+        if(this.error && this.error.message) {
+          return this.error.message
+        }
+
+        return "Error loading page."
+      }
+    }
     methods: {
       refreshPage: function() {
         window.location.reload()

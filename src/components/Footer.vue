@@ -1,10 +1,10 @@
 <template>
   <v-footer app color="purple darken-3" class="py-1">
-    <v-layout row justify-end>
-      <v-btn href="https://github.com/joeistas/heroes-parser" flat icon dark>
+    <v-layout row justify-start wrap>
+      <v-btn href="https://api.heroesindex.com" flat dark>Api</v-btn>
+      <v-btn href="https://github.com/joeistas/heroes-parser" flat dark icon>
         <v-icon>mdi-github-circle</v-icon>
       </v-btn>
-      <v-btn href="https://api.heroesindex.com" flat dark>Api</v-btn>
     </v-layout>
   </v-footer>
 </template>
