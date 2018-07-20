@@ -45,7 +45,7 @@
         version$: store$.pipe(pluck('selectedVersion'), filter(version => version !== null)),
         profileIndex$: store$.pipe(
           pluck('params', 'profile'),
-          map(profile => this.profiles.indexOf(profile).toString()),
+          map(profile => this.profiles.indexOf(profile)),
         ),
       }
     }
