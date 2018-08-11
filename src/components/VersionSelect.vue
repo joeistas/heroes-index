@@ -4,7 +4,14 @@
       <span v-if="selected">{{ selected.name }} ({{ selectedVersionDate }})</span>
       <v-icon>arrow_drop_down</v-icon>
     </v-btn>
-    <version-list :versions="versions" :selected="selected"></version-list>
+    <version-list
+      :versions="versions"
+      :selected="selected"
+      :item-type="itemType"
+      :item-id="itemId"
+      :profile="profile"
+      >
+    </version-list>
   </v-menu>
 </template>
 
@@ -30,6 +37,9 @@
     props: {
       selected: Object,
       versions: Array,
+      itemType: String,
+      itemId: String,
+      profile: String,
     },
     computed: {
       selectedVersionDate: function() {

@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md class="json-object">
+  <v-container grid-list-md class="json-object pr-0">
     <v-layout class="mt-0">
       <v-flex xs12>
         <v-btn flat class="json-object-key ma-0" @click="onClick()">
@@ -9,7 +9,7 @@
       </v-flex>
     </v-layout>
     <collapse-transition>
-      <div column v-if="expand" class="json-object-properties px-3 mb-3">
+      <div column v-if="expand" class="json-object-properties pl-3 mb-3">
         <json-property :property-key="key" :property-value="value" v-for="(value, key) in propertyValue"></json-property>
       </div>
     </collapse-transition>
@@ -19,6 +19,7 @@
 <style scoped>
   .json-object {
     margin-left: -16px;
+    width: calc(100% + 12px);
   }
 
   .json-object-key {
@@ -26,8 +27,8 @@
   }
 
   .json-object-properties {
-    border-top: 1px solid #BDBDBD;
-    border-bottom: 1px solid #BDBDBD;
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
   }
 </style>
 
@@ -48,7 +49,7 @@
     },
     data: function() {
       return {
-        expand: false,
+        expand: this.propertyValue && Object.keys(this.propertyValue).length === 1 ? true : false,
       }
     },
     computed: {
@@ -63,7 +64,13 @@
         }
 
         if(this.propertyValue.ability) {
-          return this.propertyValue.ability.name || this.propertyValue.ability.id
+          const ability = this.propertyValue.ability
+          return ability.name || ability.id
+        }
+
+        if(this.propertyValue.button) {
+          const button = this.propertyValue.button
+          return button.name || button.id
         }
 
         return undefined

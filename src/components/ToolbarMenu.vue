@@ -20,7 +20,15 @@
         </v-flex>
         <v-flex class="list">
           <collapse-transition>
-            <version-list v-show="isVersionMenuOpen" :versions="versions" :selected="selectedVersion"></version-list>
+            <version-list
+              v-show="isVersionMenuOpen"
+              :versions="versions"
+              :selected="selectedVersion"
+              :item-type="itemType"
+              :item-id="itemId"
+              :profile="profile"
+              >
+            </version-list>
           </collapse-transition>
         </v-flex>
         <v-flex class="item">
@@ -28,7 +36,14 @@
         </v-flex>
         <v-flex class="list">
           <collapse-transition>
-            <item-list v-show="isHeroMenuOpen" :items="heroes" :version="selectedVersion" itemType="heroes"></item-list>
+            <item-list
+              v-show="isHeroMenuOpen"
+              :items="heroes"
+              :version="selectedVersion"
+              :profile="profile"
+              item-type="heroes"
+              >
+            </item-list>
           </collapse-transition>
         </v-flex>
         <v-flex class="item">
@@ -36,7 +51,14 @@
         </v-flex>
         <v-flex class="list">
           <collapse-transition>
-            <item-list v-show="isMountMenuOpen" :items="mounts" :version="selectedVersion" itemType="mounts"></item-list>
+            <item-list
+              v-show="isMountMenuOpen"
+              :items="mounts"
+              :version="selectedVersion"
+              :profile="profile"
+              item-type="mounts"
+              >
+            </item-list>
           </collapse-transition>
         </v-flex>
       </v-layout>
@@ -50,7 +72,7 @@
   }
 
   .item {
-    border-bottom: 1px solid #BDBDBD;
+    border-bottom: 1px solid #DDDDDD;
   }
 </style>
 
@@ -69,10 +91,13 @@
     },
     props: {
       realm: String,
+      profile: String,
+      itemType: String,
+      itemId: String,
       selectedVersion: Object,
       versions: Array,
       heroes: Array,
-      mounts: Array
+      mounts: Array,
     },
     data: function() {
       return {

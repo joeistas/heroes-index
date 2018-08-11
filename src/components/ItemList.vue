@@ -23,7 +23,7 @@
     components: {
       "item-component": Item
     },
-    props: [ 'items', 'itemType', 'version' ],
+    props: [ 'items', 'itemType', 'version', "profile" ],
     methods: {
       routerTo: function(item: any) {
         return {
@@ -33,6 +33,7 @@
             version: this.version.buildNumber,
             item: this.itemType,
             itemId: item.id ? item.id.toLowerCase() : undefined,
+            profile: this.profile
           },
         }
       },

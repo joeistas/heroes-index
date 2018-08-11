@@ -4,16 +4,23 @@
     <v-toolbar-items class="ml-2 hidden-sm-and-down">
       <v-menu offset-y max-height="80vh">
         <v-btn slot="activator" flat dark>Heroes<v-icon>arrow_drop_down</v-icon></v-btn>
-        <item-list :items="heroes$" :version="selectedVersion$" item-type="heroes"></item-list>
+        <item-list :items="heroes$" :version="selectedVersion$" item-type="heroes" :profile="profile$"></item-list>
       </v-menu>
       <v-menu offset-y allow-overflow max-height="80vh">
         <v-btn slot="activator" dark flat>Mounts<v-icon>arrow_drop_down</v-icon></v-btn>
-        <item-list :items="mounts$" :version="selectedVersion$" item-type="mounts"></item-list>
+        <item-list :items="mounts$" :version="selectedVersion$" item-type="mounts" :profile="profile$"></item-list>
       </v-menu>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <v-toolbar-items class="mr-2 hidden-sm-and-down">
-      <version-select :selected="selectedVersion$" :versions="versions$"></version-select>
+      <version-select
+        :selected="selectedVersion$"
+        :versions="versions$"
+        :item-type="itemType$"
+        :item-id="!!selectedItem$ ? selectedItem$.id : null"
+        :profile="profile$"
+        >
+      </version-select>
     </v-toolbar-items>
     <v-btn-toggle :input-value="realm$" class="elevation-0 hidden-sm-and-down mr-3">
       <v-btn value="ptr" @click="onPtrClick()">PTR</v-btn>
@@ -25,6 +32,9 @@
         :versions="versions$"
         :heroes="heroes$"
         :mounts="mounts$"
+        :profile="profile$"
+        :item-type="itemType$"
+        :item-id="!!selectedItem$ ? selectedItem$.id : null"
         @change-realm="onPtrClick()"
         >
       </toolbar-menu>
@@ -79,10 +89,16 @@
     },
     methods: {
       onPtrClick: function() {
+        const realm = this.realm$ === 'ptr' ? 'live' : 'ptr'
+        
         this.$router.push({
           name: 'version',
           params: {
-            realm: this.realm$ === 'ptr' ? 'live' : 'ptr'
+            realm,
+            version: this.allVersions$[realm][0].buildNumber,
+            item: this.itemType$,
+            itemId: this.selectedItem$.id,
+            profile: this.profile$,
           }
         })
       },
@@ -96,13 +112,17 @@
       )
 
       return {
+        itemType$,
+        selectedItem$,
         realm$: this.$store.pipe(pluck('params', 'realm')),
+        profile$: this.$store.pipe(pluck('params', 'profile')),
         selectedVersion$: this.$store.pipe(pluck('selectedVersion'), filter(version => version !== null)),
         selectedHero$: combineLatest(itemType$, selectedItem$).pipe(map(([ itemType, item ]) => itemType === 'heroes' ? item : {})),
         selectedMount$: combineLatest(itemType$, selectedItem$).pipe(map(([ itemType, item ]) => itemType === 'mounts' ? item : {})),
         heroes$: versionDetails$.pipe(pluck('heroes')),
         mounts$: versionDetails$.pipe(pluck('mounts')),
         versions$: this.$store.pipe(pluck('versions')),
+        allVersions$: this.$store.pipe(pluck('allVersions')),
       }
     },
   })

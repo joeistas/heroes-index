@@ -23,6 +23,9 @@
     props: {
       version: Object,
       active: Boolean,
+      itemType: String,
+      itemId: String,
+      profile: String,
     },
     computed: {
       versionDate: function() {
@@ -37,7 +40,16 @@
     },
     methods: {
       onSelect: function() {
-        this.$router.push({ name: 'version', params: { realm: this.version.realm, version: this.version.buildNumber }})
+        this.$router.push({
+          name: 'version',
+          params: {
+            realm: this.version.realm,
+            version: this.version.buildNumber,
+            item: this.itemType,
+            itemId: this.itemId,
+            profile: this.profile,
+          }
+        })
       }
     },
   })

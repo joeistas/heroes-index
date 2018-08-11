@@ -5,6 +5,9 @@
       :key="version.buildNumber"
       :version="version"
       :active="selected && version ? selected.buildNumber === version.buildNumber : false"
+      :item-type="itemType"
+      :item-id="itemId"
+      :profile="profile"
       >
     </version-item>
   </v-list>
@@ -29,6 +32,9 @@
     props: {
       selected: Object,
       versions: Array,
+      itemType: String,
+      itemId: String,
+      profile: String,
     },
   })
 </script>
