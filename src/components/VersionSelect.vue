@@ -1,5 +1,5 @@
 <template>
-  <v-menu id="#version-select" offset-y left>
+  <v-menu id="#version-select" offset-y left max-height="80vh">
     <v-btn slot="activator" class="version-activator" flat dark>
       <span v-if="selected">{{ selected.name }} ({{ selectedVersionDate }})</span>
       <v-icon>arrow_drop_down</v-icon>
